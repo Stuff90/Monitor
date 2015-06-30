@@ -18,6 +18,7 @@ angular
     'ngSanitize',
     'firebase',
     'chart.js',
+    'angularMoment',
     'ngTouch'
   ])
   .config(function ($routeProvider) {
