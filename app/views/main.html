@@ -1,6 +1,2 @@
-<canvas id="bar" class="chart chart-bar" data="barChartData" labels="barChartLabels"></canvas>
-
-
-<section id="projects-pie-wrapper">
-    <canvas class="chart chart-pie" data="pieChartData" labels="pieChartLabels"></canvas>
-</section>
+<canvas id="base" chart-type="chartType" class="chart chart-base" data="commitsPerDay.commits" series="commitsPerDay.repos" labels="commitsPerDay.dates"></canvas>
+<button href="#" ng-click="toggleType();">Toggle</button>
