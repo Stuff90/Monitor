@@ -1,0 +1,90 @@
+/*
+ * -------------------------------------------------------------------------------------
+ *
+ * This file make all the import of LESS files in the project
+ *
+ * -------------------------------------------------------------------------------------
+*/
+
+
+
+/*
+ * 	================================================================
+ *	Libraries
+ * 	================================================================
+ *
+ * 	The libraries required for this config are the following :
+ *		https://github.com/christopher-ramirez/remixings.git
+ *
+ *	To complete the install, you should use the make.sh to retrieve the dependencies
+ * 		$> ./make.sh
+ *
+ * -----------------------------------------------------------------
+*/
+
+
+	// @import (reference) "remixings/remixins.less";
+
+
+	// ... add other libraries here
+
+
+
+/*
+ * 	================================================================
+ *	Config files
+ * 	================================================================
+ *
+ * 	The name of configurations files should not be updated to prevent regressions at any phase of the project
+ * 	In the config files, setup the mixins first then the custom selector.
+ *
+ * -----------------------------------------------------------------
+*/
+
+	@import "conf/reset";
+	@import "conf/colorscheme";
+	@import "conf/font";
+
+	@import "conf/layout";
+	// @import "conf/sprite.generated.less";
+
+	@import "conf/grid";
+	@import "conf/interface";
+
+
+/*
+ * 	================================================================
+ *	Fragments
+ * 	================================================================
+ *
+ *  All fragments are named the same way : myComponent.fragment
+ *
+ * -----------------------------------------------------------------
+*/
+
+	@import "fragments/header.fragment.less";
+
+	@import "fragments/charts.fragment.less";
+
+
+	// ... add others fragments  here
+
+
+/*
+ * 	================================================================
+ *	Page
+ * 	================================================================
+ *
+ *  All pages are named the same way : mySection.page
+ *
+ * -----------------------------------------------------------------
+*/
+
+	@import "pages/home.page.less";
+
+
+	// ... add others pages here
+
+
+
+

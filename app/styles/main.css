@@ -1,0 +1,446 @@
+/*
+ * -------------------------------------------------------------------------------------
+ *
+ * This file make all the import of LESS files in the project
+ *
+ * -------------------------------------------------------------------------------------
+*/
+/*
+ * 	================================================================
+ *	Libraries
+ * 	================================================================
+ *
+ * 	The libraries required for this config are the following :
+ *		https://github.com/christopher-ramirez/remixings.git
+ *
+ *	To complete the install, you should use the make.sh to retrieve the dependencies
+ * 		$> ./make.sh
+ *
+ * -----------------------------------------------------------------
+*/
+/*
+ * 	================================================================
+ *	Config files
+ * 	================================================================
+ *
+ * 	The name of configurations files should not be updated to prevent regressions at any phase of the project
+ * 	In the config files, setup the mixins first then the custom selector.
+ *
+ * -----------------------------------------------------------------
+*/
+/*
+ * -------------------------------------------------------------------------------------
+ *
+ * Resets default browser styling
+ *
+ * http://meyerweb.com/eric/tools/css/reset/
+ * v2.0 | 20110126
+ * License: none (public domain)
+ *
+ * -------------------------------------------------------------------------------------
+*/
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+ol,
+ul {
+  list-style: none;
+}
+blockquote,
+q {
+  quotes: none;
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: '';
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+/* End of reset library */
+/*
+ * -------------------------------------------------------------------------------------
+ *
+ * LESS variables for the design’s various colors
+ *
+ * -------------------------------------------------------------------------------------
+*/
+/*
+ * -------------------------------------------------------------------------------------
+ *
+ * Supplies fonts decalration
+ * Filetype required are : *.eot , *.woff , *.ttf , *.svg
+ *
+ * -------------------------------------------------------------------------------------
+*/
+/*
+ * The mixin being used for fonts declaration is the following
+ * 	@name 		: The name to be used for this font
+ * 	@filename 	: The relative path to font file without the extension (all files must have the same name)
+*/
+/*
+ * To add a font, here is the required mixin call :
+ *
+ *
+ * 		.fontFace( "Gotham Medium" 	, "res/font/din/Gotham-Medium" );
+ *  	.fontFace( "Gotham Light"	, "res/font/din/Gotham-Light" );
+ *
+ *
+ *
+ * Make sure to handle the whole weight needed by the project.
+ * use the following mixin is a good example to do so.
+ *
+ *		.gotham( @size , @weight : 300 , @color : inherit ) {
+ *		    font-family:'Gotham Medium';
+ *		    font-weight:@weight;
+ *		    .font-size(@size);
+ *		    color:@color;
+ *		}
+ *
+ *		.gotham( @size , @weight : 300 , @color : inherit ) when ( @weight = 100 ) {
+ *		    font-family:'Gotham Light';
+ *		}
+ *
+*/
+/*
+ * =====================================================================================
+ * Setup fonts here
+ * =====================================================================================
+*/
+/*
+ * -------------------------------------------------------------------------------------
+ *
+ * Design-specific layout of the site
+ * Include all style declaration that does not belong the interface designs.
+ *
+ * -------------------------------------------------------------------------------------
+*/
+/*
+ * ================================================================
+ * Variables
+ * ================================================================
+*/
+/*
+ * ================================================================
+ * Mixins
+ * ================================================================
+*/
+/*
+ * ================================================================
+ * Classes
+ * ================================================================
+*/
+/*
+ * -------------------------------------------------------------------------------------
+ *
+ * Supplies mixins for a grid system and every main-structure related elements
+ *
+ * Provide by default the grid system using this classes :
+ * 	.grid 	: to the parent element
+ * 	.row 	: to the row element
+ * 	.spanX 	: to the cell element where X is an int between 1 and @spanNumber value
+ *
+ * -------------------------------------------------------------------------------------
+*/
+.grid {
+  width: 100%;
+}
+.grid .row {
+  width: 100%;
+  overflow: auto;
+  zoom: 1;
+}
+.grid .row .span12 {
+  float: left;
+  margin: .5%;
+  position: relative;
+  width: 100%;
+}
+.grid .row .span12:first-child {
+  margin-left: 0;
+}
+.grid .row .span12:last-child {
+  margin-right: 0;
+}
+.grid .row .span11 {
+  float: left;
+  margin: .5%;
+  position: relative;
+  width: 91.58333333%;
+}
+.grid .row .span11:first-child {
+  margin-left: 0;
+}
+.grid .row .span11:last-child {
+  margin-right: 0;
+}
+.grid .row .span10 {
+  float: left;
+  margin: .5%;
+  position: relative;
+  width: 83.16666667%;
+}
+.grid .row .span10:first-child {
+  margin-left: 0;
+}
+.grid .row .span10:last-child {
+  margin-right: 0;
+}
+.grid .row .span9 {
+  float: left;
+  margin: .5%;
+  position: relative;
+  width: 74.75%;
+}
+.grid .row .span9:first-child {
+  margin-left: 0;
+}
+.grid .row .span9:last-child {
+  margin-right: 0;
+}
+.grid .row .span8 {
+  float: left;
+  margin: .5%;
+  position: relative;
+  width: 66.33333333%;
+}
+.grid .row .span8:first-child {
+  margin-left: 0;
+}
+.grid .row .span8:last-child {
+  margin-right: 0;
+}
+.grid .row .span7 {
+  float: left;
+  margin: .5%;
+  position: relative;
+  width: 57.91666667%;
+}
+.grid .row .span7:first-child {
+  margin-left: 0;
+}
+.grid .row .span7:last-child {
+  margin-right: 0;
+}
+.grid .row .span6 {
+  float: left;
+  margin: .5%;
+  position: relative;
+  width: 49.5%;
+}
+.grid .row .span6:first-child {
+  margin-left: 0;
+}
+.grid .row .span6:last-child {
+  margin-right: 0;
+}
+.grid .row .span5 {
+  float: left;
+  margin: .5%;
+  position: relative;
+  width: 41.08333333%;
+}
+.grid .row .span5:first-child {
+  margin-left: 0;
+}
+.grid .row .span5:last-child {
+  margin-right: 0;
+}
+.grid .row .span4 {
+  float: left;
+  margin: .5%;
+  position: relative;
+  width: 32.66666667%;
+}
+.grid .row .span4:first-child {
+  margin-left: 0;
+}
+.grid .row .span4:last-child {
+  margin-right: 0;
+}
+.grid .row .span3 {
+  float: left;
+  margin: .5%;
+  position: relative;
+  width: 24.25%;
+}
+.grid .row .span3:first-child {
+  margin-left: 0;
+}
+.grid .row .span3:last-child {
+  margin-right: 0;
+}
+.grid .row .span2 {
+  float: left;
+  margin: .5%;
+  position: relative;
+  width: 15.83333333%;
+}
+.grid .row .span2:first-child {
+  margin-left: 0;
+}
+.grid .row .span2:last-child {
+  margin-right: 0;
+}
+.grid .row .span1 {
+  float: left;
+  margin: .5%;
+  position: relative;
+  width: 7.41666667%;
+}
+.grid .row .span1:first-child {
+  margin-left: 0;
+}
+.grid .row .span1:last-child {
+  margin-right: 0;
+}
+/*
+ * -------------------------------------------------------------------------------------
+ *
+ * Elements of the interface features like titles, buttons, forms, and dialogs
+ *
+ * -------------------------------------------------------------------------------------
+*/
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: #000000;
+}
+a,
+a:visited {
+  color: #000000;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+/*
+ * 	================================================================
+ *	Fragments
+ * 	================================================================
+ *
+ *  All fragments are named the same way : myComponent.fragment
+ *
+ * -----------------------------------------------------------------
+*/
+.chart-container {
+  width: 50vw;
+}
+/*
+ * 	================================================================
+ *	Page
+ * 	================================================================
+ *
+ *  All pages are named the same way : mySection.page
+ *
+ * -----------------------------------------------------------------
+*/

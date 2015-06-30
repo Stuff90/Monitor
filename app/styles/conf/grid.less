@@ -1,0 +1,41 @@
+/*
+ * -------------------------------------------------------------------------------------
+ *
+ * Supplies mixins for a grid system and every main-structure related elements
+ *
+ * Provide by default the grid system using this classes :
+ * 	.grid 	: to the parent element
+ * 	.row 	: to the row element
+ * 	.spanX 	: to the cell element where X is an int between 1 and @spanNumber value
+ *
+ * -------------------------------------------------------------------------------------
+*/
+
+	@spanNumber:12;
+
+
+	.grid {
+		width:100%;
+		.row {
+			width:100%;
+			overflow: auto;
+			zoom: 1;
+
+			.spanLoop (@index) when (@index > 0) {
+
+				.span@{index} {
+					float:left;
+					margin:.5%;
+					position: relative;
+					width: (100% / @spanNumber) * @index - 1 + (@index / @spanNumber);
+
+					&:first-child 	{ 	margin-left:0; 	}
+					&:last-child 	{ 	margin-right:0; }
+				}
+
+				.spanLoop(@index - 1);
+			}
+
+			.spanLoop (@spanNumber);
+		}
+	}
