@@ -1,2 +1,33 @@
-<canvas id="base" chart-type="chartType" class="chart chart-base" data="commitsPerDay.commits" series="commitsPerDay.repos" labels="commitsPerDay.dates"></canvas>
-<button href="#" ng-click="toggleType();">Toggle</button>
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">Ileotech Gihtub Monitor</a>
+    </div>
+
+  </div>
+</nav>
+
+
+<div class="row">
+    <div class="col-md-6">
+        <canvas id="base" chart-type="chartType" class="chart chart-base" data="commitsPerDay.commits" series="commitsPerDay.repos" labels="commitsPerDay.dates"></canvas>
+    </div>
+    <div class="col-md-1">
+    </div>
+    <div class="col-md-3">
+        <div class="list-group commitList">
+            <div ng-repeat="aCommit in lastCommits" class="list-group-item" data-list="items" data-item="item" animate>
+                <figure>
+                    <img src="{{ aCommit.image }}" alt="">
+                </figure>
+                <h4 class="list-group-item-heading">{{ aCommit.userName }} in {{ aCommit.repo }}</h4>
+                <p class="list-group-item-text">{{ aCommit.message }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+    </div>
+</div>
+
+<button type="button" class="btn btn-default" ng-click="toggleType();">Toggle</button>
