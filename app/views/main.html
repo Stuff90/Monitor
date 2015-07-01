@@ -1,20 +1,35 @@
-<nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-      <a class="navbar-brand" href="#">Ileotech Gihtub Monitor</a>
-    </div>
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Ileotech Gihtub Monitor</a>
+        </div>
 
-  </div>
+
+        <ul class="nav navbar-nav">
+            <button type="button" class="btn btn-default navbar-btn" ng-click="full();">Full Screen</button>
+            <button type="button" class="btn btn-default navbar-btn" ng-click="toggleType();">Toggle chart type</button>
+        </ul>
+
+    </div>
 </nav>
 
 
 <div class="row">
-    <div class="col-md-6">
-        <canvas id="base" chart-type="chartType" class="chart chart-base" data="commitsPerDay.commits" series="commitsPerDay.repos" labels="commitsPerDay.dates"></canvas>
+    <div class="col-md-7">
+        <section id="chart-project-by-date">
+            <canvas id="base" chart-type="chartType" class="chart chart-base" data="commitsPerDay.commits" series="commitsPerDay.repos" labels="commitsPerDay.dates" legend="1"></canvas>
+        </section>
+
+        <section id="chart-commit-by-user">
+            <canvas id="pie" class="chart chart-pie" data="commitsPerUser.commits" labels="commitsPerUser.user" legend="1"></canvas>
+        </section>
+
     </div>
+    <div class="col-md-1"></div>
+
     <div class="col-md-1">
     </div>
+
     <div class="col-md-3">
         <div class="list-group commitList">
             <div ng-repeat="aCommit in lastCommits" class="list-group-item" data-list="items" data-item="item" animate>
@@ -23,11 +38,8 @@
                 </figure>
                 <h4 class="list-group-item-heading">{{ aCommit.userName }} in {{ aCommit.repo }}</h4>
                 <p class="list-group-item-text">{{ aCommit.message }}</p>
+                <time class="list-group-item-time">{{ aCommit.date.format('llll') }}</time>
             </div>
         </div>
     </div>
-    <div class="col-md-2">
-    </div>
 </div>
-
-<button type="button" class="btn btn-default" ng-click="toggleType();">Toggle</button>
