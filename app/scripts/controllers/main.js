@@ -15,7 +15,7 @@
 
   		var extractRepoNameRegExp = /https:\/\/github.com\/[a-zA-Z0-9-_]*\/([a-zA-Z-]*)\/.*/;
 
-  		$scope.chartType = 'Bar';
+  		$scope.chartType = 'Line';
 
   		$scope.toggleType = function(){
   			if($scope.chartType === 'Line') {
@@ -23,7 +23,9 @@
   			} else {
 	  			$scope.chartType = 'Line';
   			}
-  		}
+  		};
+
+  		$scope.lastCommits = [];
 
 
   		var DataSet = function( ) {
@@ -43,7 +45,7 @@
 
 					var theUserName = aCommit.committer.username,
 						theRepo 	= aCommit.url.match(extractRepoNameRegExp)[1],
-						theDate 	= commitTimestamp.format('D/MM');
+						theDate 	= commitTimestamp.format('D-MM-YYYY');
 
 	  				this.addUser( theUserName );
 	  				this.addRepo( theRepo );
@@ -55,20 +57,37 @@
   				},
 
 
-  				getCommitsPerDay : function() {
+  				getTotalCommitsPerUser : function() {
   					var sortedDates = self.getSortedDates();
 
   					var result = {
-  						commits : [[]],
-  						dates 	: []
+  						commits : [],
+  						user 	: [],
   					};
 
-  					for (var i = 0; i < sortedDates.length; i++) {
-  						var theDate = sortedDates[i];
+  					for( var aDate in self.commitsPerDatePerRepoPerUser ) {
+  						var commitPerDate = self.commitsPerDatePerRepoPerUser[aDate];
 
-  						result.dates.push(theDate);
-  						result.commits[0].push(self.commitsPerDatePerRepoPerUser[theDate]._total);
+  						for( var aRepo in commitPerDate ) {
+  							var commitPerRepo = commitPerDate[aRepo];
+
+	  						for( var aUser in commitPerRepo ) {
+	  							var commitPerUser = commitPerRepo[aUser];
+
+	  							if( aUser !== "_total" ) {
+
+	  								var indexOfUser = self.pushToArray( result.user , aUser );
+
+	  								if(!!!result.commits[indexOfUser]) {
+	  									result.commits[indexOfUser] = commitPerUser;
+	  								} else {
+	  									result.commits[indexOfUser] += commitPerUser;
+	  								}
+	  							}
+	  						}
+  						}
   					}
+
   					return result;
   				},
 
@@ -171,7 +190,14 @@
 				for( var aDay in self.commitsPerDatePerRepoPerUser ) {
 					sortedDates.push(aDay);
 				}
-				sortedDates.sort();
+				sortedDates.sort(function(a, b){
+					var thekA = moment(a, 'D-MM-YYYY'),
+						thekB = moment(b, 'D-MM-YYYY');
+
+					if(thekA.diff(thekB) < 0) return -1
+					if(thekA.diff(thekB) > 0) return 1
+					return 0;
+				})
 				return sortedDates;
 			},
 
@@ -201,16 +227,29 @@
 
 
 
+  		$scope.full = function(){
+  			var el = document.documentElement,
+  				rfs = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen ;
+		    rfs.call(el);
+  		}
 
 
 
 
 
-
-		// var i = 0;
+		var i = 0;
 
   		var parseCommit = function( commitData ) {
-  			// if(i === 0) { console.info(commitData); } i++;
+  			if(i === 0) { console.info(commitData); } i++;
+
+  			var lastCommit = {
+  				userName 	: commitData.sender.login,
+  				message 	: commitData.message,
+  				image 		: commitData.sender.avatar_url,
+  				repo 		: commitData.url.match(extractRepoNameRegExp)[1],
+  				date 		: moment(commitData.timestamp)
+  			}
+  			$scope.lastCommits.unshift(lastCommit);
 
   			$scope.theDataSet.addCommit( commitData );
  		};
@@ -225,7 +264,8 @@
 
   			commitsData.$loaded(function(data){
 		  		data.forEach(parseCommit);
-		  		$scope.commitsPerDay = $scope.theDataSet.getCommitsPerDayPerRepo();
+		  		$scope.commitsPerDay 	= $scope.theDataSet.getCommitsPerDayPerRepo();
+		  		$scope.commitsPerUser 	= $scope.theDataSet.getTotalCommitsPerUser()
   			});
 
   		});
