@@ -58,11 +58,9 @@
 
 
   				getTotalCommitsPerUser : function() {
-  					var sortedDates = self.getSortedDates();
-
   					var result = {
   						commits : [],
-  						user 	: [],
+  						user 	  : [],
   					};
 
   					for( var aDate in self.commitsPerDatePerRepoPerUser ) {
@@ -74,7 +72,7 @@
 	  						for( var aUser in commitPerRepo ) {
 	  							var commitPerUser = commitPerRepo[aUser];
 
-	  							if( aUser !== "_total" ) {
+	  							if( aUser !== '_total' ) {
 
 	  								var indexOfUser = self.pushToArray( result.user , aUser );
 
@@ -106,9 +104,9 @@
 
   						result.dates.push(theDate);
 
-  						for( var aRepo in self.commitsPerDatePerRepoPerUser[theDate] ) {
-  							if( aRepo !== '_total' && result.repos.indexOf(aRepo) < 0) {
-  								result.repos.push(aRepo);
+  						for( var anExistingRepo in self.commitsPerDatePerRepoPerUser[theDate] ) {
+  							if( anExistingRepo !== '_total' && result.repos.indexOf(anExistingRepo) < 0) {
+  								result.repos.push(anExistingRepo);
   								result.commits.push([]);
   							}
   						}
@@ -194,10 +192,10 @@
 					var thekA = moment(a, 'D-MM-YYYY'),
 						thekB = moment(b, 'D-MM-YYYY');
 
-					if(thekA.diff(thekB) < 0) return -1
-					if(thekA.diff(thekB) > 0) return 1
+					if(thekA.diff(thekB) < 0) { return -1; }
+					if(thekA.diff(thekB) > 0) { return 1; }
 					return 0;
-				})
+				});
 				return sortedDates;
 			},
 
@@ -231,7 +229,7 @@
   			var el = document.documentElement,
   				rfs = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen ;
 		    rfs.call(el);
-  		}
+  		};
 
 
 
@@ -248,7 +246,7 @@
   				image 		: commitData.sender.avatar_url,
   				repo 		: commitData.url.match(extractRepoNameRegExp)[1],
   				date 		: moment(commitData.timestamp)
-  			}
+  			};
   			$scope.lastCommits.unshift(lastCommit);
 
   			$scope.theDataSet.addCommit( commitData );
@@ -265,7 +263,7 @@
   			commitsData.$loaded(function(data){
 		  		data.forEach(parseCommit);
 		  		$scope.commitsPerDay 	= $scope.theDataSet.getCommitsPerDayPerRepo();
-		  		$scope.commitsPerUser 	= $scope.theDataSet.getTotalCommitsPerUser()
+		  		$scope.commitsPerUser 	= $scope.theDataSet.getTotalCommitsPerUser();
   			});
 
   		});
