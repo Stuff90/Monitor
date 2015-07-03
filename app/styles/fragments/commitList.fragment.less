@@ -1,4 +1,35 @@
 .commitList {
-	max-height:50vh;
-	overflow:auto;
+	max-height:100vh;
+	overflow:hidden;
+
+	> div {
+		.min-height(90px);
+
+		figure {
+			float:left;
+		}
+
+		figure, figure > img {
+			.size(70px,70px);
+		}
+
+		h4, p {
+			.padding-left(80px);
+		}
+
+		h4 {
+			.padding-top(8px);
+			.font-size(18px);
+		}
+
+		p {
+			.font-size(14px);
+		}
+
+		time {
+			position: absolute;
+			.top(8px);
+			.right(15px);
+		}
+	}
 }
