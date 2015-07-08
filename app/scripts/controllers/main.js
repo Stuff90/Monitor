@@ -9,7 +9,7 @@
  */
 
  angular.module('monitorApp')
-	 .controller('MainCtrl' , ['$scope', '$firebaseArray', '$firebaseObject' , function ($scope, $firebaseArray , $firebaseObject) {
+	 .controller('MainCtrl' , ['$scope', 'ChartDataParserFactory' , '$firebaseArray', '$firebaseObject' , function ($scope, ChartDataParserFactory , $firebaseArray , $firebaseObject) {
   		var ref 		= new Firebase('https://ileotech.firebaseio.com'),
   			commitsData = $firebaseObject(ref.child('commits/history'));
 
