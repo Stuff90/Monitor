@@ -22,15 +22,21 @@ angular.module('monitorApp')
             return {
 
                 addCommit : function( aCommit ) {
-                    var commitTimestamp = moment(aCommit.timestamp);
 
-                    var theUserName = aCommit.committer.username || aCommit.committer.name || aCommit.committer.email,
-                        theRepo     = aCommit.url.match(extractRepoNameRegExp)[1],
-                        theDate     = commitTimestamp.format('D-MM-YYYY');
+                    if( self.loadedCommits.indexOf( aCommit.id ) < 0) {
 
-                    self.addToTotalCommitByUser( theUserName );
-                    self.addToTotalCommitsByRepoForDate( theDate , theRepo );
-                    self.addToTotalCommitsByUserForRepo( theDate , theRepo , theUserName );
+                        var commitTimestamp = moment(aCommit.timestamp);
+
+                        var theUserName = aCommit.committer.username || aCommit.committer.name || aCommit.committer.email,
+                            theRepo     = aCommit.url.match(extractRepoNameRegExp)[1],
+                            theDate     = commitTimestamp.format('D-MM-YYYY');
+
+                        self.loadedCommits.push(aCommit.id);
+
+                        self.addToTotalCommitByUser( theUserName );
+                        self.addToTotalCommitsByRepoForDate( theDate , theRepo );
+                        self.addToTotalCommitsByUserForRepo( theDate , theRepo , theUserName );
+                    }
 
                     return this;
                 },
@@ -88,13 +94,8 @@ angular.module('monitorApp')
 
 
                 resetData : function() {
-                    // self.allUsers   = [];
-                    // self.allRepos   = [];
-                    // self.allDates   = [];
 
-                    // self.commitsPerDatePerUsers = [];
-                    // self.commitsPerDatePerRepoPerUser = [];
-
+                    self.loadedCommits = [];
 
                     self.totalCommitsByUser         = { commits : [] , user : [] };
                     self.totalCommitsByRepoForDate  = { commits : [] , dates : [] , repos : [] };
@@ -106,6 +107,8 @@ angular.module('monitorApp')
         }
 
         ChartDataParser.prototype = {
+
+            loadedCommits : [],
 
             totalCommitsByUser : { commits : [] , user : [] },
             totalCommitsByRepoForDate : { commits : [] , dates : [] , repos : [] },
