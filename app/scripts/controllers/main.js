@@ -15,14 +15,22 @@
 
   		var extractRepoNameRegExp = /https:\/\/github.com\/[a-zA-Z0-9-_]*\/([a-zA-Z-]*)\/.*/;
 
-  		$scope.chartType = 'Line';
+  		$scope.chartType = {
+            main    : 'Line',
+            second  : 'Doughnut',
+            third   : 'Bar',
+        };
 
-  		$scope.toggleType = function(){
-  			if($scope.chartType === 'Line') {
-  				$scope.chartType = 'Bar';
-  			} else {
-	  			$scope.chartType = 'Line';
-  			}
+  		$scope.toggleChart = function( chartIndex ){
+            if(chartIndex === 0) {
+                $scope.chartType.main  = $scope.chartType.main === 'Line' ? 'Bar' : 'Line';
+            }
+            if(chartIndex === 1) {
+                $scope.chartType.second  = $scope.chartType.second === 'Doughnut' ? 'PolarArea' : 'Doughnut';
+            }
+            if(chartIndex === 2) {
+                $scope.chartType.third  = $scope.chartType.third === 'Bar' ? 'Radar' : 'Bar';
+            }
   		};
 
   		$scope.lastCommits = [];
@@ -43,7 +51,7 @@
   				addCommit : function( aCommit ) {
 					var commitTimestamp = moment(aCommit.timestamp);
 
-					var theUserName = aCommit.committer.username,
+					var theUserName = aCommit.committer.username || aCommit.committer.name || aCommit.committer.email,
 						theRepo 	= aCommit.url.match(extractRepoNameRegExp)[1],
 						theDate 	= commitTimestamp.format('D-MM-YYYY');
 
@@ -51,82 +59,94 @@
 	  				this.addRepo( theRepo );
 	  				this.addDate( theDate) ;
 
-	  				self.addCommitToDatePerRepoPerUser( theDate , theRepo , theUserName );
+                    self.addCommitToDatePerRepoPerUser( theDate , theRepo , theUserName );
+
+                    self.addToTotalCommitByUser( theUserName );
+	  				self.addToTotalCommitsByRepoForDate( theDate , theRepo );
 
   					return this;
   				},
 
 
-  				getTotalCommitsPerUser : function() {
-  					var result = {
-  						commits : [],
-  						user 	  : [],
-  					};
+                getTotalCommitsPerProjectsPerUsers : function() {
+                    var result = {
+                        commits : [],
+                        users   : [],
+                        repos   : []
+                    };
 
-  					for( var aDate in self.commitsPerDatePerRepoPerUser ) {
-  						var commitPerDate = self.commitsPerDatePerRepoPerUser[aDate];
+                    for( var aDate in self.commitsPerDatePerRepoPerUser ) {
+                        var commitPerDate = self.commitsPerDatePerRepoPerUser[aDate];
 
-  						for( var aRepo in commitPerDate ) {
-  							var commitPerRepo = commitPerDate[aRepo];
+                        for( var aRepo in commitPerDate ) {
+                            var commitPerRepo = commitPerDate[aRepo];
 
-	  						for( var aUser in commitPerRepo ) {
-	  							var commitPerUser = commitPerRepo[aUser];
+                            if( aRepo !== '_total' ) {
+                                var indexOfRepo = self.pushToArray( result.repos , aRepo );
 
-	  							if( aUser !== '_total' ) {
 
-	  								var indexOfUser = self.pushToArray( result.user , aUser );
+                                for( var aUser in commitPerRepo ) {
+                                    var commitPerUser = commitPerRepo[aUser];
 
-	  								if(!!!result.commits[indexOfUser]) {
-	  									result.commits[indexOfUser] = commitPerUser;
-	  								} else {
-	  									result.commits[indexOfUser] += commitPerUser;
-	  								}
-	  							}
-	  						}
-  						}
-  					}
+                                    if( aUser !== '_total' ) {
 
-  					return result;
+                                        if (result.users.indexOf(aUser) < 0) {
+                                            result.commits.push([]);
+                                        }
+
+                                        var indexOfUser = self.pushToArray( result.users , aUser );
+
+                                        for (var i = 0; i < result.repos.length; i++) {
+                                            if(result.commits[indexOfUser][i] === undefined) {
+                                                result.commits[indexOfUser][i] = 0;
+                                            }
+                                        };
+
+                                        result.commits[indexOfUser][indexOfRepo] += commitPerUser;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+
+
+
+                    for (var i = 0; i < result.repos.length; i++) {
+                        for (var j = 0; j < result.users.length; j++) {
+                            if(result.commits[j][i] === undefined) {
+                                result.commits[j][i] = 0;
+                            }
+                        }
+                    };
+
+                    return result;
+                },
+
+
+  				getTotalCommitsByUser : function() {
+                    return self.totalCommitsByUser;
   				},
 
 
   				getCommitsPerDayPerRepo : function() {
-  					var sortedDates = self.getSortedDates();
 
-  					var result = {
-  						commits : [],
-  						dates 	: [],
-  						repos 	: []
-  					};
+                    var result = {
+                        commits : [],
+                        dates   : self.getSortedDates(),
+                        repos   : self.totalCommitsByRepoForDate.repos
+                    };
 
-  					for (var i = 0; i < sortedDates.length; i++) {
-  						var theDate = sortedDates[i];
-
-  						result.dates.push(theDate);
-
-  						for( var anExistingRepo in self.commitsPerDatePerRepoPerUser[theDate] ) {
-  							if( anExistingRepo !== '_total' && result.repos.indexOf(anExistingRepo) < 0) {
-  								result.repos.push(anExistingRepo);
-  								result.commits.push([]);
-  							}
-  						}
-  					}
-
-  					for (var j = 0; j < result.dates.length; j++) {
-  						var aDate = result.dates[j];
-
-  						for (var k = 0; k < result.repos.length; k++) {
-  							var aRepo = result.repos[k];
-
-  							var repoIndex 	= result.repos.indexOf(aRepo),
-  								theValue 	= 0;
-
-  							if( self.commitsPerDatePerRepoPerUser[aDate][aRepo] !== undefined) {
-  								theValue = self.commitsPerDatePerRepoPerUser[aDate][aRepo]._total;
-  							}
-  							result.commits[repoIndex].push(theValue);
-	  					}
-  					}
+                    for( var aRepo in result.repos ) {
+                        result.commits[aRepo] = []
+                        for( var aDate in result.dates ) {
+                            if(self.totalCommitsByRepoForDate.commits[aRepo][aDate] === undefined) {
+                                result.commits[aRepo][aDate] = 0;
+                            } else {
+                                result.commits[aRepo][aDate] = self.totalCommitsByRepoForDate.commits[aRepo][aDate];
+                            }
+                        }
+                    }
 
   					return result;
   				},
@@ -173,6 +193,10 @@
 
   		DataSet.prototype = {
 
+            totalCommitsByUser : { commits : [] , user : [] },
+            totalCommitsByRepoForDate : { commits : [] , dates : [] , repos : [] },
+
+
   			pushToArray : function( theArray , data ) {
   				var theIndex = theArray.indexOf(data);
   				if(theIndex < 0) {
@@ -180,6 +204,32 @@
   				}
   				return theArray.indexOf(data);
   			},
+
+            addToTotalCommitByUser: function( theUserName ){
+
+                var indexOfUser = this.pushToArray( this.totalCommitsByUser.user , theUserName );
+
+                if(this.totalCommitsByUser.commits[indexOfUser] === undefined ) {
+                    this.totalCommitsByUser.commits[indexOfUser] = 0;
+                }
+                this.totalCommitsByUser.commits[indexOfUser]++;
+
+            },
+
+            addToTotalCommitsByRepoForDate: function( theDate , theRepo  ) {
+
+                if(this.totalCommitsByRepoForDate.repos.indexOf(theRepo) < 0 ) {
+                    this.totalCommitsByRepoForDate.commits.push([]);
+                }
+                var indexOfDate = this.pushToArray( this.totalCommitsByRepoForDate.dates , theDate ),
+                    indexOfRepo = this.pushToArray( this.totalCommitsByRepoForDate.repos , theRepo );
+
+                if(this.totalCommitsByRepoForDate.commits[indexOfRepo][indexOfDate] === undefined) {
+                    this.totalCommitsByRepoForDate.commits[indexOfRepo][indexOfDate] = 0;
+                }
+                this.totalCommitsByRepoForDate.commits[indexOfRepo][indexOfDate]++;
+            },
+
 
   			getSortedDates : function() {
   				var self 		= this,
@@ -217,6 +267,7 @@
   				self.commitsPerDatePerRepoPerUser[theDate]._total++;
   				self.commitsPerDatePerRepoPerUser[theDate][repoName]._total++;
   				self.commitsPerDatePerRepoPerUser[theDate][repoName][userName]++;
+
   			}
   		};
 
@@ -262,8 +313,12 @@
 
   			commitsData.$loaded(function(data){
 		  		data.forEach(parseCommit);
-		  		$scope.commitsPerDay 	= $scope.theDataSet.getCommitsPerDayPerRepo();
-		  		$scope.commitsPerUser 	= $scope.theDataSet.getTotalCommitsPerUser();
+
+		  		$scope.commitsPerDay 	         = $scope.theDataSet.getCommitsPerDayPerRepo();
+                $scope.commitsPerUser            = $scope.theDataSet.getTotalCommitsByUser();
+		  		$scope.commitsPerProjectPerUsers = $scope.theDataSet.getTotalCommitsPerProjectsPerUsers();
+
+                console.info($scope.commitsPerDay);
   			});
 
   		});

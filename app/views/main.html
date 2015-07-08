@@ -5,29 +5,33 @@
         </div>
 
 
-        <ul class="nav navbar-nav">
-            <button type="button" class="btn btn-default navbar-btn" ng-click="full();">Full Screen</button>
-            <button type="button" class="btn btn-default navbar-btn" ng-click="toggleType();">Toggle chart type</button>
-        </ul>
+        <div class="collapse navbar-collapse">
+            <button type="button" class="btn btn-primary navbar-btn" ng-click="full();">Full Screen</button>
+            <button type="button" class="btn btn-info navbar-btn" ng-click="toggleChart(0);">Toggle Main Chart</button>
+            <button type="button" class="btn btn-info navbar-btn" ng-click="toggleChart(1);">Toggle 2nd Chart</button>
+            <button type="button" class="btn btn-info navbar-btn" ng-click="toggleChart(2);">Toggle 3rd Chart</button>
+        </div>
 
     </div>
 </nav>
 
 
 <div class="row">
-    <div class="col-md-7">
-        <section id="chart-project-by-date">
-            <canvas id="base" chart-type="chartType" class="chart chart-base" data="commitsPerDay.commits" series="commitsPerDay.repos" labels="commitsPerDay.dates" legend="1"></canvas>
-        </section>
+    <div class="col-md-9">
+        <div>
+            <section id="chart-project-by-date">
+                <canvas id="base" chart-type="chartType.main" class="chart chart-base" data="commitsPerDay.commits" series="commitsPerDay.repos" labels="commitsPerDay.dates" legend="1"></canvas>
+            </section>
 
-        <section id="chart-commit-by-user">
-            <canvas id="pie" class="chart chart-pie" data="commitsPerUser.commits" labels="commitsPerUser.user" legend="1"></canvas>
-        </section>
-
-    </div>
-    <div class="col-md-1"></div>
-
-    <div class="col-md-1">
+        </div>
+        <div class="row">
+            <section id="chart-commit-by-user" class="col-md-6">
+                <canvas id="pie" class="chart chart-base" chart-type="chartType.second" data="commitsPerUser.commits" labels="commitsPerUser.user" legend="1"></canvas>
+            </section>
+            <section id="chart-commit-by-project" class="col-md-6">
+                <canvas id="pouet" class="chart chart-base" chart-type="chartType.third"  chart-type="chartTypeUserByProjects" data="commitsPerProjectPerUsers.commits" labels="commitsPerProjectPerUsers.repos" series="commitsPerProjectPerUsers.users" legend="1"></canvas>
+            </section>
+        </div>
     </div>
 
     <div class="col-md-3">
