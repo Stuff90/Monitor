@@ -159,9 +159,10 @@ angular.module('monitorApp')
                 var self    = this,
                 sortedDates = [];
 
-                for( var aDay in arrayOfDates ) {
-                    sortedDates.push(aDay);
-                }
+                for (var i = 0; i < arrayOfDates.length; i++) {
+                    sortedDates.push(arrayOfDates[i]);
+                };
+
                 sortedDates.sort(function(a, b){
                     var thekA = moment(a, 'D-MM-YYYY'),
                     thekB = moment(b, 'D-MM-YYYY');
@@ -170,6 +171,7 @@ angular.module('monitorApp')
                     if(thekA.diff(thekB) > 0) { return 1; }
                     return 0;
                 });
+
                 return sortedDates;
             }
         }
