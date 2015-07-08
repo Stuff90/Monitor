@@ -25,8 +25,8 @@ angular.module('monitorApp')
                     var commitTimestamp = moment(aCommit.timestamp);
 
                     var theUserName = aCommit.committer.username || aCommit.committer.name || aCommit.committer.email,
-                    theRepo         = aCommit.url.match(extractRepoNameRegExp)[1],
-                    theDate         = commitTimestamp.format('D-MM-YYYY');
+                        theRepo     = aCommit.url.match(extractRepoNameRegExp)[1],
+                        theDate     = commitTimestamp.format('D-MM-YYYY');
 
                     self.addToTotalCommitByUser( theUserName );
                     self.addToTotalCommitsByRepoForDate( theDate , theRepo );
@@ -88,12 +88,17 @@ angular.module('monitorApp')
 
 
                 resetData : function() {
-                    self.allUsers   = [];
-                    self.allRepos   = [];
-                    self.allDates   = [];
+                    // self.allUsers   = [];
+                    // self.allRepos   = [];
+                    // self.allDates   = [];
 
-                    self.commitsPerDatePerUsers = [];
-                    self.commitsPerDatePerRepoPerUser = [];
+                    // self.commitsPerDatePerUsers = [];
+                    // self.commitsPerDatePerRepoPerUser = [];
+
+
+                    self.totalCommitsByUser         = { commits : [] , user : [] };
+                    self.totalCommitsByRepoForDate  = { commits : [] , dates : [] , repos : [] };
+                    self.totalCommitsByUserForRepo  = { commits : [] , users : [] , repos : [] };
 
                     return this;
                 }
